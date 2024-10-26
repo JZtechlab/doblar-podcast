@@ -4,7 +4,7 @@ from pydub import AudioSegment
 from tkinter import Tk, filedialog
 
 # Configurar el servicio con tu clave y región de Azure
-speech_key = "tuAPI"  # Reemplaza con tu clave de suscripción
+speech_key = "04ee5dc0d04e4a1186c076ef83d58d6e"  # Reemplaza con tu clave de suscripción
 service_region = "westeurope"  # Reemplaza con tu región de Azure
 
 # Voces seleccionadas de Azure: Ximena y Álvaro
@@ -27,7 +27,7 @@ def sintetizar_voz(texto, nombre_voz, nombre_archivo):
         print(f"Error en la síntesis de voz: {resultado.reason}")
 
 # Función para leer el archivo y alternar entre los personajes
-def procesar_podcast(archivo_texto):
+def procesar_podcast(archivo_texto, ruta_guardado):
     with open(archivo_texto, 'r', encoding='utf-8') as f:
         lineas = f.readlines()
 
@@ -56,8 +56,8 @@ def procesar_podcast(archivo_texto):
 
     # Combinar los audios generados con pausas cortas entre frases del mismo hablante
     podcast_final = AudioSegment.empty()
-    pausa_frases = AudioSegment.silent(duration=40)  # Pausa de 0.1 segundos entre frases de un mismo hablante
-    pausa_entre_personajes = AudioSegment.silent(duration=150)  # Pausa de 0.3 segundos entre diferentes hablantes
+    pausa_frases = AudioSegment.silent(duration=10)  # Pausa de 0.1 segundos entre frases de un mismo hablante
+    pausa_entre_personajes = AudioSegment.silent(duration=150)  # Pausa de 0.15 segundos entre diferentes hablantes
 
     for i, audio in enumerate(audios):
         podcast_final += audio
@@ -68,7 +68,6 @@ def procesar_podcast(archivo_texto):
             podcast_final += pausa_entre_personajes
 
     # Guardar el archivo final en formato MP3
-    ruta_guardado = r"C:\Users\jokin\OneDrive\Escritorio\python\podcast_final.mp3"
     podcast_final.export(ruta_guardado, format="mp3", bitrate="192k")
     print(f"Podcast final generado en: {ruta_guardado}")
 
@@ -79,7 +78,17 @@ def seleccionar_archivo():
     archivo_texto = filedialog.askopenfilename(title="Seleccionar archivo de texto", filetypes=[("Archivos de texto", "*.txt")])
     if archivo_texto:
         print(f"Archivo seleccionado: {archivo_texto}")
-        procesar_podcast(archivo_texto)
+        
+        # Seleccionar la ubicación y nombre del archivo de salida
+        ruta_guardado = filedialog.asksaveasfilename(
+            title="Guardar podcast como",
+            defaultextension=".mp3",
+            filetypes=[("Archivo MP3", "*.mp3")]
+        )
+        if ruta_guardado:
+            procesar_podcast(archivo_texto, ruta_guardado)
+        else:
+            print("No se seleccionó una ubicación para guardar el archivo.")
     else:
         print("No se seleccionó ningún archivo.")
 
