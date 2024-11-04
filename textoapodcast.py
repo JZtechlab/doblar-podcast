@@ -4,7 +4,7 @@ from pydub import AudioSegment
 from tkinter import Tk, filedialog
 
 # Configurar el servicio con tu clave y región de Azure
-speech_key = "04ee5dc0d04e4a1186c076ef83d58d6e"  # Reemplaza con tu clave de suscripción
+speech_key = "Tu llave API"  # Reemplaza con tu clave de suscripción
 service_region = "westeurope"  # Reemplaza con tu región de Azure
 
 # Voces seleccionadas de Azure: Ximena y Álvaro
